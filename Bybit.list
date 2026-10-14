@@ -15,3 +15,11 @@ DOMAIN-SUFFIX,bybit-global.com
 DOMAIN-SUFFIX,bybit.cloud
 DOMAIN-SUFFIX,bybitglobal.com
 DOMAIN-SUFFIX,bybit.global
+DOMAIN-SUFFIX,bybit.eu
+DOMAIN-SUFFIX,bybit.tr
+DOMAIN-SUFFIX,bybit.kz
+DOMAIN-SUFFIX,bybitgeorgia.ge
+DOMAIN-SUFFIX,bybit.ae
+DOMAIN-SUFFIX,bybit.id
+DOMAIN-SUFFIX,byffbb.com
+DOMAIN,monitor-frontend-collector.a.bybit-aws.com

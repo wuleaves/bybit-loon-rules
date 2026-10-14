@@ -29,3 +29,14 @@ https://raw.githubusercontent.com/wuleaves/bybit-loon-rules/main/Bybit.list,poli
 如果手机 App 仍无法登录，请在 Loon 请求记录开启时重新尝试登录，查看失败请求的主机名、命中规则和实际策略。
 只需提供这些信息，不要公开密码、验证码、Cookie、Authorization 或含令牌的完整 URL。
 第三方登录、验证码、DNS、规则优先级和节点连通性也可能影响登录；没有请求证据时，不把 Google、Apple 或验证码服务的整个域名加入此专用规则。
+
+
+## 扩展域名与来源（2026-10-14）
+
+本轮新增 8 条，规则总数为 25 条。所有条目使用订阅所选策略。
+
+- 区域站点：`bybit.eu`、`bybit.tr`、`bybit.kz`、`bybitgeorgia.ge`、`bybit.ae`、`bybit.id`。依据 [Bybit 官方 API 文档](https://bybit-exchange.github.io/docs/v5/guide#authentication) 中列出的区域 API 地址，以域名后缀规则覆盖对应站点及子域名。官方 API 地址不等于手机 App 登录地址；这些条目仅补充区域站点覆盖。
+- 备用域名候选：`byffbb.com`。依据 [社区规则原始列表](https://gist.github.com/toimc/00cd37e1cccd4dde12af96ba4b60e638) 补充；[公开 DNS 观测](https://dnsrepo.noc.org/?ip=163.171.146.25) 中也出现过 `api3.byffbb.com`。尚未通过本机手机 App 请求记录确认登录用途，也未取得官方登录接口说明。
+- 监控主机：`monitor-frontend-collector.a.bybit-aws.com`。依据 [社区抓包报告](https://github.com/blackmatrix7/ios_rule_script/issues/1476) 精确匹配该主机，不扩大到整个 `bybit-aws.com`。这是辅助监控流量，未确认是登录必需依赖。
+
+本轮更新用于补齐已发现的域名覆盖，不代表已经定位或修复手机登录故障。未纳入社区列表中的通用统计域名，也未新增 Google、Apple 或验证码服务的全域规则。
