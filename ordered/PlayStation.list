@@ -1,0 +1,9 @@
+# Loon rules; assign policy on import.
+# Category: PlayStation
+# Sources and counts: sources-and-stats.json
+# Generated; edit custom/PlayStation.list for additions.
+DOMAIN-SUFFIX,playstation
+DOMAIN-SUFFIX,playstation.com
+DOMAIN-SUFFIX,playstation.net
+DOMAIN-SUFFIX,playstationnetwork.com
+DOMAIN-SUFFIX,sonyentertainmentnetwork.com

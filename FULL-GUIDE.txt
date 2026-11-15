@@ -1,0 +1,23 @@
+Loon 完整分流：Nexitally 分类 + 公开上游自动更新
+
+Loon-Full.conf 是远程规则模板；须先保留/添加自己的节点订阅，再让 PROXY 指向有效节点。
+建议将策略组与远程规则合并进现有配置，不要直接覆盖已有节点、DNS 或证书设置。
+NX- 前缀用于避免同名冲突；Apple、Microsoft、Bilibili 默认直连，其他服务默认代理，可自行切换。
+完整优先级及数量见 sources-and-stats.json。Bybit 优先于 Crypto；AI、YouTube 优先于 Google；GitHub 优先于 Microsoft；国内服务例外先于宽泛服务分类。
+Loon-Local-Routing.conf 是严格按顺序展开的离线规则片段，与远程模板二选一，只有远程订阅会随仓库更新。
+不把 Nexitally 的私有节点、进程规则、随机直连域名或 DNS 覆写上传。分类参考不等于一比一复刻原规则。
+
+rules/：每类独立去重版本，可单独使用。
+ordered/：用于完整模板，删除被前面类别完全覆盖的规则；请按模板顺序使用，不建议单独抽取。
+相同策略的域名后缀覆盖可安全合并；跨策略仅删除已被早先规则完全覆盖的项。宽泛的后置规则仍保留，以免丢失未被覆盖的子域名。
+IP 只去除精确重复；未声称解决所有网段交集。规则优先级仍决定结果。
+
+自动更新：每天北京时间 06:47；Actions 可手动运行。所有源通过格式、数量检查后才发布，失败保留旧版。Loon 也需要刷新远程规则。
+custom/分类名.list 可添加兼容规则，下次构建会合并。此处只支持新增，不是优先强制覆盖；改变策略请调整源清单及顺序。
+Bybit.list 保留手工维护；其变更会触发完整构建。国内旧订阅地址保持有效。
+
+来源：MetaCubeX/meta-rules-dat（国内/服务分类）、Loyalsoldier/clash-rules（通用海外/局域网）。每个精确 URL 与内容校验值记录在 sources-and-stats.json。
+采用 MetaCubeX 提供的 domain list 版本；它与 classical 含正则版本不完全等价。不支持的格式会令更新失败，不会静默丢弃。
+Apple/Microsoft/Steam 的国内服务例外采用同源 @cn/apple-cn 集合，避免再叠加不同体系的 CDN 总表。
+保留上游归属，来源项目的许可证仍适用；本仓库转换不改变原始规则的许可。
+已做构建与去重验证；未在 iPhone Loon 上实机验证。规则不能保证节点解锁、地区或服务可用性。

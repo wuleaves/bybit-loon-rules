@@ -1,0 +1,5 @@
+# Loon rules; assign policy on import.
+# Category: MyTVSuper
+# Sources and counts: sources-and-stats.json
+# Generated; edit custom/MyTVSuper.list for additions.
+DOMAIN-SUFFIX,mytvsuper.com

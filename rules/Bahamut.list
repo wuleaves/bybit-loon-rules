@@ -1,0 +1,9 @@
+# Loon rules; assign policy on import.
+# Category: Bahamut
+# Sources and counts: sources-and-stats.json
+# Generated; edit custom/Bahamut.list for additions.
+DOMAIN-SUFFIX,bahamut.akamaized.net
+DOMAIN-SUFFIX,bahamut.com.tw
+DOMAIN-SUFFIX,gamer.com.tw
+DOMAIN,gamer-cds.cdn.hinet.net
+DOMAIN,gamer2-cds.cdn.hinet.net
