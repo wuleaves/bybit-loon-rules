@@ -1,36 +1,43 @@
-Loon 国内直连规则 — 2026-11-15 本地快照
+Loon 国内直连规则 — 自动同步版
 
-文件
-ChinaDirect.list：119817 条。国内域名 110177 条，IPv4 网段 6217 条，IPv6 网段 3423 条。
-LANDirect.list：160 条。局域网/保留域名与 IP，保留 no-resolve。
+更新方式
+GitHub Actions 每天 UTC 22:47（北京时间次日 06:47）检查上游；计划任务可能排队延迟。
+手动更新：Actions → Sync Loon direct rules → Run workflow。
+首次运行已成功：ChinaDirect.list 119817 条、LANDirect.list 160 条；以后以文件头数量为准。
+Loon 需要定期更新远程规则，才能拉取仓库中的新版本。
+GitHub 可能暂停长期无仓库活动的公共仓库计划任务；发现停更时在 Actions 检查并重新启用。
 
-上传与使用
-1. 将两个 .list 文件上传到你的 GitHub 仓库。
-2. 在 Loon 的远程规则中添加对应 Raw 地址，策略选择 DIRECT。
-3. 或将下面两行合并进现有配置的 [Remote Rule] 段。替换 USER、REPO 和 main 为实际用户名、仓库、分支；不要重复添加配置段。
-
+直接订阅
+将下面内容合并到现有 [Remote Rule] 段，或在 Loon 界面添加 URL 并选择 DIRECT：
 [Remote Rule]
-https://raw.githubusercontent.com/USER/REPO/main/LANDirect.list,policy=DIRECT,tag=局域网直连,enabled=true
-https://raw.githubusercontent.com/USER/REPO/main/ChinaDirect.list,policy=DIRECT,tag=国内直连,enabled=true
+https://raw.githubusercontent.com/wuleaves/bybit-loon-rules/main/LANDirect.list,policy=DIRECT,tag=局域网直连,enabled=true
+https://raw.githubusercontent.com/wuleaves/bybit-loon-rules/main/ChinaDirect.list,policy=DIRECT,tag=国内直连,enabled=true
 
-优先级
-局域网直连优先；指定网站代理（包括现有海外域名规则）优先于国内直连；最终兜底在最后。
-本文件仅提供直连集合，不包含原 Clash 的海外代理列表、Telegram 策略、节点或 DNS 设置，因此单独导入不等同于迁移整套 Clash 配置。
-国内 IP 规则未添加 no-resolve，以保留本地正在使用配置的行为；局域网 IP 保留 no-resolve。
-远程列表内不写 DIRECT，由导入时的 policy=DIRECT 指定。
+优先级与范围
+局域网直连优先；Bybit 等指定网站代理和海外代理规则应优先于国内直连；最终兜底在最后。
+这是直连规则集合，不包含节点、密码、DNS 设置或整套 Clash 策略。
+Bybit.list 不在自动更新范围内，保留原文件和手工补充。
+国内 IP 允许解析以匹配；局域网 IP 保留 no-resolve；IPv6 使用 IP-CIDR6。
 
-来源与转换
-国内规则：本地 oc-cn-domain.mrs、china-ip.mrs，来源 MetaCubeX/meta-rules-dat。
-局域网规则：本地 private-domains.yaml、private-ips.yaml，来源 Loyalsoldier/clash-rules。
-另保留本地显式 cn、lan 域名后缀规则；合并精确重复行。
-MRS 使用本机 Mihomo 的导出功能解析，不是重新下载的不同版本。
-Clash 的 +.domain 转为 DOMAIN-SUFFIX；精确域名转为 DOMAIN；IPv4/IPv6 分别转为 IP-CIDR/IP-CIDR6。
-保留上游来源说明；再分发应遵守各上游仓库许可证，本次转换不另行声明原创许可。
-https://github.com/MetaCubeX/meta-rules-dat
-https://github.com/Loyalsoldier/clash-rules
-Loon 官方格式参考：https://github.com/Loon0x00/LoonExampleConfig/blob/master/Rule/ExampleRule.list
+自定义补充
+可创建 custom/ChinaDirect.list 或 custom/LANDirect.list，按 Loon 格式写规则（不附 DIRECT 策略）。
+支持 DOMAIN、DOMAIN-SUFFIX、IP-CIDR、IP-CIDR6；IP 可附 no-resolve；# 开头是注释。
+修改 custom/ 后自动触发合并、去重与发布。不要直接修改根目录生成文件，它们会被上游同步覆盖。
+例如：DOMAIN-SUFFIX,example.com
 
-验证
-已检查转换类型、IP 地址与前缀长度、重复行；未在 iPhone 的 Loon 内实测。
-这是静态快照，不会因上游更新而自动重建。Loon 自动拉取只能获取你实际上传的版本。
-仅上传本目录中的文件，不要上传此前导出的包含节点凭据的 Clash 完整配置。
+失败保护
+每个来源下载最多重试三次，拒绝异常格式和过小列表，规则总数比已发布版本减少超过 20% 时停止。
+所有来源通过校验后才生成文件并提交；失败不会发布半份更新。上游有意大幅删减时需人工核实后调整阈值。
+只有内容改变才产生更新提交。更新失败可在 Actions 查看日志。
+
+来源与许可
+国内域名：https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.list
+国内 IP：https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.list
+局域网域名：https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/private.txt
+局域网 IP：https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/lancidr.txt
+自动任务使用与原 MRS 同项目的可读文本版本，并保留 cn、lan 后缀补充。
+上游 +.domain 转为 DOMAIN-SUFFIX，精确域名转为 DOMAIN，IPv4/IPv6 转为对应 IP-CIDR 类型。
+来源仓库：https://github.com/MetaCubeX/meta-rules-dat 和 https://github.com/Loyalsoldier/clash-rules
+保留来源说明；再分发遵守上游许可证，本转换不另行声明原创许可。
+Loon 格式参考：https://github.com/Loon0x00/LoonExampleConfig/blob/master/Rule/ExampleRule.list
+已通过 GitHub 上的下载、转换、校验和提交验证；尚未在 iPhone Loon 实机验证。
