@@ -1,0 +1,140 @@
+name: Sync Loon direct rules
+on:
+  schedule:
+    - cron: '47 22 * * *'
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/sync-loon-direct.yml'
+      - 'custom/**'
+permissions:
+  contents: write
+concurrency:
+  group: loon-direct-rules
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download, convert and validate all rule sources
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import ast
+          import ipaddress
+          import os
+          import re
+          import time
+          import urllib.request
+          from pathlib import Path
+          
+          BASE = "https://raw.githubusercontent.com/"
+          SOURCES = {
+              "cn_domain": BASE + "MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.list",
+              "cn_ip": BASE + "MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.list",
+              "lan_domain": BASE + "Loyalsoldier/clash-rules/release/private.txt",
+              "lan_ip": BASE + "Loyalsoldier/clash-rules/release/lancidr.txt",
+          }
+          
+          def download(url):
+              for attempt in range(3):
+                  try:
+                      req = urllib.request.Request(url, headers={"User-Agent": "Loon-rules-sync"})
+                      with urllib.request.urlopen(req, timeout=60) as response:
+                          data = response.read(20_000_001)
+                      if len(data) > 20_000_000:
+                          raise ValueError("Source too large")
+                      return data.decode("utf-8-sig")
+                  except Exception:
+                      if attempt == 2:
+                          raise
+                      time.sleep(3 * (attempt + 1))
+          
+          def entries(text, yaml=False):
+              result = []
+              for raw in text.splitlines():
+                  line = raw.strip()
+                  if not line or line.startswith("#"):
+                      continue
+                  if yaml:
+                      if line == "payload:":
+                          continue
+                      if not line.startswith("- "):
+                          raise ValueError("Unexpected YAML structure")
+                      line = line[2:].strip()
+                      if line.startswith(("'", '"')):
+                          line = ast.literal_eval(line)
+                  if not isinstance(line, str) or not line:
+                      raise ValueError("Invalid source entry")
+                  result.append(line)
+              return result
+          
+          def domain(value):
+              suffix = value.startswith("+.")
+              host = value[2:] if suffix else value
+              if not re.fullmatch(r"[A-Za-z0-9_-]+(?:.[A-Za-z0-9_-]+)*", host):
+                  raise ValueError("Unsupported domain: " + value)
+              return ("DOMAIN-SUFFIX," if suffix else "DOMAIN,") + host.lower()
+          
+          def cidr(value, no_resolve=False):
+              net = ipaddress.ip_network(value, strict=True)
+              return ("IP-CIDR6," if net.version == 6 else "IP-CIDR,") + str(net) + (",no-resolve" if no_resolve else "")
+          
+          def custom(path):
+              if not Path(path).exists():
+                  return []
+              result = []
+              for line in entries(Path(path).read_text(encoding="utf-8-sig")):
+                  parts = line.split(",")
+                  if len(parts) == 2 and parts[0] in ("DOMAIN", "DOMAIN-SUFFIX"):
+                      result.append(domain(("+." if parts[0] == "DOMAIN-SUFFIX" else "") + parts[1]))
+                  elif len(parts) in (2, 3) and parts[0] in ("IP-CIDR", "IP-CIDR6"):
+                      if len(parts) == 3 and parts[2] != "no-resolve":
+                          raise ValueError("Invalid custom option")
+                      converted = cidr(parts[1], len(parts) == 3)
+                      if converted.split(",")[0] != parts[0]:
+                          raise ValueError("Wrong IP family")
+                      result.append(converted)
+                  else:
+                      raise ValueError("Unsupported custom rule: " + line)
+              return result
+          
+          data = {key: entries(download(url), key.startswith("lan")) for key, url in SOURCES.items()}
+          for key, minimum in {"cn_domain": 50000, "cn_ip": 3000, "lan_domain": 50, "lan_ip": 15}.items():
+              if len(data[key]) < minimum:
+                  raise ValueError("Source unexpectedly small: " + key)
+          outputs = {
+              "ChinaDirect.list": [domain(x) for x in data["cn_domain"]] + ["DOMAIN-SUFFIX,cn"] + [cidr(x) for x in data["cn_ip"]] + custom("custom/ChinaDirect.list"),
+              "LANDirect.list": [domain(x) for x in data["lan_domain"]] + ["DOMAIN-SUFFIX,lan"] + [cidr(x, True) for x in data["lan_ip"]] + custom("custom/LANDirect.list"),
+          }
+          prepared = {}
+          for filename, rules in outputs.items():
+              rules = sorted(set(rules), key=lambda r: (r.startswith("IP-"), r))
+              path = Path(filename)
+              old = entries(path.read_text(encoding="utf-8-sig")) if path.exists() else []
+              if old and len(rules) < len(old) * 0.8:
+                  raise ValueError("Rule count dropped over 20%: " + filename)
+              header = "# Loon remote rules; import with policy=DIRECT.\n# Generated from upstream; edit custom/ files for additions.\n# Sources: https://github.com/MetaCubeX/meta-rules-dat https://github.com/Loyalsoldier/clash-rules\n"
+              prepared[filename] = header + "# Rules: " + str(len(rules)) + "\n" + "\n".join(rules) + "\n"
+              print(filename, len(rules), "rules validated")
+          # Publish only after all downloads and validation have succeeded.
+          for filename, text in prepared.items():
+              Path(filename).write_text(text, encoding="utf-8", newline="\n")
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
+              for name, rules in outputs.items():
+                  summary.write(f"- {name}: {len(set(rules))} rules validated\n")
+          PY
+      - name: Commit validated rule updates
+        shell: bash
+        run: |
+          git add -- ChinaDirect.list LANDirect.list
+          if git diff --cached --quiet; then
+            echo "Upstream rules unchanged" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "Update Loon direct rules from upstream"
+          git push
