@@ -1,0 +1,36 @@
+Loon 国内直连规则 — 2026-11-15 本地快照
+
+文件
+ChinaDirect.list：119817 条。国内域名 110177 条，IPv4 网段 6217 条，IPv6 网段 3423 条。
+LANDirect.list：160 条。局域网/保留域名与 IP，保留 no-resolve。
+
+上传与使用
+1. 将两个 .list 文件上传到你的 GitHub 仓库。
+2. 在 Loon 的远程规则中添加对应 Raw 地址，策略选择 DIRECT。
+3. 或将下面两行合并进现有配置的 [Remote Rule] 段。替换 USER、REPO 和 main 为实际用户名、仓库、分支；不要重复添加配置段。
+
+[Remote Rule]
+https://raw.githubusercontent.com/USER/REPO/main/LANDirect.list,policy=DIRECT,tag=局域网直连,enabled=true
+https://raw.githubusercontent.com/USER/REPO/main/ChinaDirect.list,policy=DIRECT,tag=国内直连,enabled=true
+
+优先级
+局域网直连优先；指定网站代理（包括现有海外域名规则）优先于国内直连；最终兜底在最后。
+本文件仅提供直连集合，不包含原 Clash 的海外代理列表、Telegram 策略、节点或 DNS 设置，因此单独导入不等同于迁移整套 Clash 配置。
+国内 IP 规则未添加 no-resolve，以保留本地正在使用配置的行为；局域网 IP 保留 no-resolve。
+远程列表内不写 DIRECT，由导入时的 policy=DIRECT 指定。
+
+来源与转换
+国内规则：本地 oc-cn-domain.mrs、china-ip.mrs，来源 MetaCubeX/meta-rules-dat。
+局域网规则：本地 private-domains.yaml、private-ips.yaml，来源 Loyalsoldier/clash-rules。
+另保留本地显式 cn、lan 域名后缀规则；合并精确重复行。
+MRS 使用本机 Mihomo 的导出功能解析，不是重新下载的不同版本。
+Clash 的 +.domain 转为 DOMAIN-SUFFIX；精确域名转为 DOMAIN；IPv4/IPv6 分别转为 IP-CIDR/IP-CIDR6。
+保留上游来源说明；再分发应遵守各上游仓库许可证，本次转换不另行声明原创许可。
+https://github.com/MetaCubeX/meta-rules-dat
+https://github.com/Loyalsoldier/clash-rules
+Loon 官方格式参考：https://github.com/Loon0x00/LoonExampleConfig/blob/master/Rule/ExampleRule.list
+
+验证
+已检查转换类型、IP 地址与前缀长度、重复行；未在 iPhone 的 Loon 内实测。
+这是静态快照，不会因上游更新而自动重建。Loon 自动拉取只能获取你实际上传的版本。
+仅上传本目录中的文件，不要上传此前导出的包含节点凭据的 Clash 完整配置。
