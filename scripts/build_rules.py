@@ -64,6 +64,26 @@ def compact(rules):
   if not c.covered(s):out.append(s);c.add(s)
  return out
 
+class DedicatedCoverage(Coverage):
+ # Also detect generic suffixes that contain any dedicated domain.
+ def __init__(self):super().__init__();self.ancestors=set()
+ def add(self,s):
+  super().add(s);p=s.split(',')
+  if p[0] in {'DOMAIN','DOMAIN-SUFFIX'}:
+   labels=p[1].split('.')
+   self.ancestors.update('.'.join(labels[i:]) for i in range(len(labels)))
+ def intersects(self,s):
+  p=s.split(',')
+  return self.covered(s) or (p[0]=='DOMAIN-SUFFIX' and p[1] in self.ancestors)
+
+def test_generic_exclusion():
+ c=DedicatedCoverage()
+ c.add('DOMAIN,ai.example.com');c.add('DOMAIN-SUFFIX,video.test')
+ assert c.intersects('DOMAIN-SUFFIX,example.com')
+ assert c.intersects('DOMAIN,cdn.video.test')
+ assert not c.intersects('DOMAIN,example.com')
+ assert not c.intersects('DOMAIN-SUFFIX,notexample.com')
+
 def main():
  urls={k:META+'geosite/'+v+'.list' for k,v in CATEGORIES.items()}
  urls.update({'cn':META+'geosite/cn.list','cnip':META+'geoip/cn.list','telegramip':META+'geoip/telegram.list','netflixip':META+'geoip/netflix.list','private':LOYAL+'private.txt','privateip':LOYAL+'lancidr.txt','proxy':LOYAL+'proxy.txt','applecn':META+'geosite/apple-cn.list','mscn':META+'geosite/microsoft@cn.list','steamcn':META+'geosite/steam@cn.list'})
@@ -81,17 +101,26 @@ def main():
  for k,n in {'China':50000,'Overseas':10000,'LAN':50}.items():
   if len(raw[k])<n:raise ValueError('Source too small '+k)
  # Each category remains useful on its own; ordered/ removes rules shadowed by earlier policies.
- independent={};effective={};stats={};prior=Coverage();report_old={}
+ test_generic_exclusion()
+ independent={};effective={};stats={};prior=Coverage();dedicated=DedicatedCoverage();report_old={}
  if Path('sources-and-stats.json').exists():report_old=json.loads(Path('sources-and-stats.json').read_text())
  for k in ORDER:
   custom=Path('custom')/(k+'.list')
   if custom.exists():raw[k]+=[validate(x) for x in lines(custom.read_text(encoding='utf-8-sig'))]
   independent[k]=compact(raw[k])
+  within_removed=len(raw[k])-len(independent[k]);generic_excluded=0
+  if k=='Overseas':
+   before=len(independent[k])
+   independent[k]=[s for s in independent[k] if not dedicated.intersects(s)]
+   generic_excluded=before-len(independent[k])
+   assert not any(dedicated.intersects(s) for s in independent[k])
+  elif k!='China':
+   for s in independent[k]:dedicated.add(s)
   old=report_old.get('categories',{}).get(k,{}).get('source_count',0)
   if old and len(raw[k])<old*0.8:raise ValueError('Source count dropped >20%: '+k)
   effective[k]=[s for s in independent[k] if not prior.covered(s)]
   for s in effective[k]:prior.add(s)
-  stats[k]={'source_count':len(raw[k]),'independent_count':len(independent[k]),'effective_count':len(effective[k]),'within_removed':len(raw[k])-len(independent[k]),'earlier_shadowed':len(independent[k])-len(effective[k])}
+  stats[k]={'source_count':len(raw[k]),'independent_count':len(independent[k]),'effective_count':len(effective[k]),'within_removed':within_removed,'generic_excluded':generic_excluded,'earlier_shadowed':len(independent[k])-len(effective[k])}
  outputs={}
  def render(k,r):return '# Loon rules; assign policy on import.\n# Category: '+k+'\n# Sources and counts: sources-and-stats.json\n# Generated; edit custom/'+k+'.list for additions.\n'+'\n'.join(r)+'\n'
  for k in ORDER:
@@ -116,7 +145,7 @@ def main():
    p=s.split(',');local.append(','.join(p[:2]+[policy(k)]+p[2:]))
  local.append('FINAL,NX-Final')
  outputs['Loon-Local-Routing.conf']=warning+'\n'.join(groups)+'\n\n[Rule]\n'+'\n'.join(local)+'\n'
- report={'order':ORDER,'sources':urls,'source_sha256':{k:hashlib.sha256(t.encode()).hexdigest() for k,t in data.items()},'categories':stats,'notes':['Nexitally classification reference only; source domains come from public upstream.','Bybit.list is preserved, then incorporated with highest service priority.','Only exact and proven DOMAIN/DOMAIN-SUFFIX coverage removed; overlapping IP ranges and keywords are preserved.','No attempt to widen or subtract a later broad suffix around earlier exceptions.']}
+ report={'order':ORDER,'sources':urls,'source_sha256':{k:hashlib.sha256(t.encode()).hexdigest() for k,t in data.items()},'categories':stats,'notes':['Nexitally classification reference only; source domains come from public upstream.','Bybit.list is preserved, then incorporated with highest service priority.','Only exact and proven DOMAIN/DOMAIN-SUFFIX coverage removed; overlapping IP ranges and keywords are preserved.','Generic Overseas excludes dedicated domains and intersecting broad suffixes; unmatched traffic uses FINAL.']}
  outputs['sources-and-stats.json']=json.dumps(report,ensure_ascii=False,indent=2)+'\n'
  outputs['FULL-GUIDE.txt']='''Loon 完整分流：Nexitally 分类 + 公开上游自动更新
 
@@ -129,7 +158,8 @@ Loon-Local-Routing.conf 是严格按顺序展开的离线规则片段，与远�
 
 rules/：每类独立去重版本，可单独使用。
 ordered/：用于完整模板，删除被前面类别完全覆盖的规则；请按模板顺序使用，不建议单独抽取。
-相同策略的域名后缀覆盖可安全合并；跨策略仅删除已被早先规则完全覆盖的项。宽泛的后置规则仍保留，以免丢失未被覆盖的子域名。
+相同策略的域名后缀覆盖可安全合并；跨策略删除已被早先规则完全覆盖的项。
+通用海外 Overseas 不包含专用分类：rules/ 与 ordered/ 两版均移除重叠项，包括包含专用域名的宽泛后缀。移除宽泛项后，未分类流量由 FINAL 策略处理。自动更新始终执行此排除。
 IP 只去除精确重复；未声称解决所有网段交集。规则优先级仍决定结果。
 
 自动更新：每天北京时间 06:47；Actions 可手动运行。所有源通过格式、数量检查后才发布，失败保留旧版。Loon 也需要刷新远程规则。
