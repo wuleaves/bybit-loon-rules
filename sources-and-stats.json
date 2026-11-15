@@ -96,6 +96,7 @@
       "independent_count": 160,
       "effective_count": 160,
       "within_removed": 1,
+      "generic_excluded": 0,
       "earlier_shadowed": 0
     },
     "Bybit": {
@@ -103,6 +104,7 @@
       "independent_count": 25,
       "effective_count": 25,
       "within_removed": 0,
+      "generic_excluded": 0,
       "earlier_shadowed": 0
     },
     "AI": {
@@ -110,6 +112,7 @@
       "independent_count": 217,
       "effective_count": 217,
       "within_removed": 0,
+      "generic_excluded": 0,
       "earlier_shadowed": 0
     },
     "Scholar": {
@@ -117,6 +120,7 @@
       "independent_count": 465,
       "effective_count": 465,
       "within_removed": 1,
+      "generic_excluded": 0,
       "earlier_shadowed": 0
     },
     "MyTVSuper": {
@@ -124,6 +128,7 @@
       "independent_count": 1,
       "effective_count": 1,
       "within_removed": 0,
+      "generic_excluded": 0,
       "earlier_shadowed": 0
     },
     "Crypto": {
@@ -131,6 +136,7 @@
       "independent_count": 240,
       "effective_count": 224,
       "within_removed": 0,
+      "generic_excluded": 0,
       "earlier_shadowed": 16
     },
     "YouTube": {
@@ -138,6 +144,7 @@
       "independent_count": 177,
       "effective_count": 177,
       "within_removed": 1,
+      "generic_excluded": 0,
       "earlier_shadowed": 0
     },
     "Netflix": {
@@ -145,6 +152,7 @@
       "independent_count": 146,
       "effective_count": 146,
       "within_removed": 0,
+      "generic_excluded": 0,
       "earlier_shadowed": 0
     },
     "Telegram": {
@@ -152,6 +160,7 @@
       "independent_count": 33,
       "effective_count": 33,
       "within_removed": 0,
+      "generic_excluded": 0,
       "earlier_shadowed": 0
     },
     "HBO": {
@@ -159,6 +168,7 @@
       "independent_count": 65,
       "effective_count": 65,
       "within_removed": 0,
+      "generic_excluded": 0,
       "earlier_shadowed": 0
     },
     "DisneyPlus": {
@@ -166,6 +176,7 @@
       "independent_count": 222,
       "effective_count": 222,
       "within_removed": 2,
+      "generic_excluded": 0,
       "earlier_shadowed": 0
     },
     "Bahamut": {
@@ -173,6 +184,7 @@
       "independent_count": 5,
       "effective_count": 5,
       "within_removed": 0,
+      "generic_excluded": 0,
       "earlier_shadowed": 0
     },
     "Bilibili": {
@@ -180,6 +192,7 @@
       "independent_count": 53,
       "effective_count": 53,
       "within_removed": 0,
+      "generic_excluded": 0,
       "earlier_shadowed": 0
     },
     "GitHub": {
@@ -187,6 +200,7 @@
       "independent_count": 60,
       "effective_count": 57,
       "within_removed": 6,
+      "generic_excluded": 0,
       "earlier_shadowed": 3
     },
     "ServiceDirect": {
@@ -194,6 +208,7 @@
       "independent_count": 373,
       "effective_count": 373,
       "within_removed": 0,
+      "generic_excluded": 0,
       "earlier_shadowed": 0
     },
     "Steam": {
@@ -201,6 +216,7 @@
       "independent_count": 60,
       "effective_count": 42,
       "within_removed": 1,
+      "generic_excluded": 0,
       "earlier_shadowed": 18
     },
     "Epic": {
@@ -208,6 +224,7 @@
       "independent_count": 30,
       "effective_count": 30,
       "within_removed": 0,
+      "generic_excluded": 0,
       "earlier_shadowed": 0
     },
     "Xbox": {
@@ -215,6 +232,7 @@
       "independent_count": 42,
       "effective_count": 41,
       "within_removed": 0,
+      "generic_excluded": 0,
       "earlier_shadowed": 1
     },
     "PlayStation": {
@@ -222,6 +240,7 @@
       "independent_count": 5,
       "effective_count": 5,
       "within_removed": 0,
+      "generic_excluded": 0,
       "earlier_shadowed": 0
     },
     "Tiktok": {
@@ -229,6 +248,7 @@
       "independent_count": 39,
       "effective_count": 39,
       "within_removed": 1,
+      "generic_excluded": 0,
       "earlier_shadowed": 0
     },
     "Google": {
@@ -236,6 +256,7 @@
       "independent_count": 847,
       "effective_count": 674,
       "within_removed": 231,
+      "generic_excluded": 0,
       "earlier_shadowed": 173
     },
     "Microsoft": {
@@ -243,6 +264,7 @@
       "independent_count": 637,
       "effective_count": 427,
       "within_removed": 119,
+      "generic_excluded": 0,
       "earlier_shadowed": 210
     },
     "Apple": {
@@ -250,27 +272,30 @@
       "independent_count": 1584,
       "effective_count": 1550,
       "within_removed": 210,
+      "generic_excluded": 0,
       "earlier_shadowed": 34
     },
     "Overseas": {
       "source_count": 27352,
-      "independent_count": 26675,
-      "effective_count": 22731,
+      "independent_count": 22688,
+      "effective_count": 22688,
       "within_removed": 677,
-      "earlier_shadowed": 3944
+      "generic_excluded": 3987,
+      "earlier_shadowed": 0
     },
     "China": {
       "source_count": 119818,
       "independent_count": 119817,
-      "effective_count": 119520,
+      "effective_count": 119531,
       "within_removed": 1,
-      "earlier_shadowed": 297
+      "generic_excluded": 0,
+      "earlier_shadowed": 286
     }
   },
   "notes": [
     "Nexitally classification reference only; source domains come from public upstream.",
     "Bybit.list is preserved, then incorporated with highest service priority.",
     "Only exact and proven DOMAIN/DOMAIN-SUFFIX coverage removed; overlapping IP ranges and keywords are preserved.",
-    "No attempt to widen or subtract a later broad suffix around earlier exceptions."
+    "Generic Overseas excludes dedicated domains and intersecting broad suffixes; unmatched traffic uses FINAL."
   ]
 }

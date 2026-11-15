@@ -56297,6 +56297,7 @@ DOMAIN-SUFFIX,kashen8.com
 DOMAIN-SUFFIX,kashengauto.com
 DOMAIN-SUFFIX,kasitesoft.com
 DOMAIN-SUFFIX,kaslyju.com
+DOMAIN-SUFFIX,kaspersky-labs.com
 DOMAIN-SUFFIX,kasscloud.com
 DOMAIN-SUFFIX,kate-kanebo.net
 DOMAIN-SUFFIX,katvr.com
@@ -72972,6 +72973,7 @@ DOMAIN-SUFFIX,qianzhengdaiban.com
 DOMAIN-SUFFIX,qianzhou.shop
 DOMAIN-SUFFIX,qianzhu8.com
 DOMAIN-SUFFIX,qianzhuvisa.com
+DOMAIN-SUFFIX,qiao-cn.com
 DOMAIN-SUFFIX,qiaobo.net
 DOMAIN-SUFFIX,qiaobocnc.com
 DOMAIN-SUFFIX,qiaobuqiao.com
@@ -109761,6 +109763,7 @@ DOMAIN-SUFFIX,ctrip.co.id
 DOMAIN-SUFFIX,ctrip.co.kr
 DOMAIN-SUFFIX,ctrip.co.th
 DOMAIN-SUFFIX,ctrip.com.hk
+DOMAIN-SUFFIX,d4z1onkegyrs5.cloudfront.net
 DOMAIN-SUFFIX,da.anythinktech.com
 DOMAIN-SUFFIX,datk.anythinktech.com
 DOMAIN-SUFFIX,developer.htcvive.com
@@ -109837,6 +109840,7 @@ DOMAIN-SUFFIX,mtk.com.tw
 DOMAIN-SUFFIX,noxagile.duapp.com
 DOMAIN-SUFFIX,ntp.felixc.at
 DOMAIN-SUFFIX,one.edu.kg
+DOMAIN-SUFFIX,p-bstarstatic.akamaized.net
 DOMAIN-SUFFIX,p.bstarstatic.com
 DOMAIN-SUFFIX,partner.cdnetworks.com
 DOMAIN-SUFFIX,pingan.com.hk
@@ -109859,6 +109863,9 @@ DOMAIN-SUFFIX,travel6.co.uk
 DOMAIN-SUFFIX,turnitin.org.in
 DOMAIN-SUFFIX,txwy.com.tw
 DOMAIN-SUFFIX,unsemi.com.tw
+DOMAIN-SUFFIX,upos-bstar-mirrorakam.akamaized.net
+DOMAIN-SUFFIX,upos-bstar1-mirrorakam.akamaized.net
+DOMAIN-SUFFIX,upos-hz-mirrorakam.akamaized.net
 DOMAIN-SUFFIX,vankeclub.com.hk
 DOMAIN-SUFFIX,wechatpay.com.hk
 DOMAIN-SUFFIX,wechatpay.com.my
@@ -109882,6 +109889,10 @@ DOMAIN-SUFFIX,neofussvr.sslcs.cdngc.net
 DOMAIN-SUFFIX,ocsp.us.cdnetworks.com
 DOMAIN-SUFFIX,qsb.browser.miui.srv
 DOMAIN-SUFFIX,uat1.bfsspadserver.8le8le.com
+DOMAIN-SUFFIX,lenovo.com.cdn.cloudflare.net
+DOMAIN-SUFFIX,oemssl.cn.cdn.cloudflare.net
+DOMAIN-SUFFIX,qualcomm.cn.cdn.cloudflare.net
+DOMAIN-SUFFIX,sectigochina.com.cdn.cloudflare.net
 IP-CIDR6,2001:250::/30
 IP-CIDR6,2001:254::/33
 IP-CIDR6,2001:255::/32
