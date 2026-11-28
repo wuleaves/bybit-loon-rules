@@ -59,12 +59,12 @@
     "steamcn": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/steam@cn.list"
   },
   "source_sha256": {
-    "Scholar": "d92d01f73540c3469e3e818fe4d5c34918cd1c5e7d4688e72a8b7f69b1b12a2a",
+    "Scholar": "45f2592e51f7963a710e2ea199999923d7e0a1a29f54d963a6fbbe74280683b1",
     "MyTVSuper": "93dbaf18957e3e5e6907acdff2f9f82bc776fbe1781995d6614f7f65e1b62c5d",
-    "Crypto": "2da0401767baa31220ac3b84ba4e7c5daf210139567470e69f98b836499d7ee1",
-    "AI": "1f2572c68a862227fb87941cca982a95bbf96f066b26b138db01b3efaf979baa",
+    "Crypto": "cccfafbf6f42479341e0930e2c257dc3b99c710dd7eb3cb1c35d238587f3e890",
+    "AI": "0a528dd66730c5fc980bc5d9e42401e110d55c3107aea5812fb494422e86672f",
     "YouTube": "e95f241fa4357918fc1066390c352aad750b571ddea15e3421d30c84e947ac10",
-    "Google": "08389e23abef22bfa28d534a63df7da7803cb7bf6fc4c7b21186130d447bf486",
+    "Google": "00dd9d0a82699850e5de5790af91bd79bbea8f30830b69c02aae07cd197a4afb",
     "Netflix": "aa3e83152b51840332440177399fcae048733419f4dde7a65383757beedf369a",
     "Telegram": "2448b2699519cd258b10232fcacd01e89b7db04c8ce7fc860a4962518370a329",
     "Steam": "39d0906eee2be501771d2399a7890e2f22495d935f8e608bb1c3e3f2dc093c15",
@@ -72,11 +72,11 @@
     "Xbox": "8720dd0c0e20f9627ca33ba0da5242714df232ba4fa5846bbdac062dbcc93bfc",
     "PlayStation": "d88cd99d5933c8e443a2f62d8defa88adbdeffe1ddc68abb432e914eaa9ea4cf",
     "HBO": "1aabe139b16a11aa7cbc88391cd17860e3fcd542a3f41bb988486eb31c2b4ada",
-    "DisneyPlus": "761bc8faf336f1526d9420f23aca229acb90aeb051218ce59fdcb4f7e226f95b",
+    "DisneyPlus": "9e7a51f96e59087d40e2b77cce6a27d115f62aa8cfdf5e3137e28a56a8ed0797",
     "Bahamut": "04adcb8fb6a0959770219241cd7f471ed9037bb9c8a1156828375d2bb1b46321",
     "Bilibili": "d1d76d33c08b2bfaea6b1f661c87eeb2064f6ebd7c5dbe8e1f2bb8ab5b4acc98",
-    "Microsoft": "1d70bc6828c22652f1d1cbe4ca350474194aa49f2171f85d6c3ca8a80f1ebbdf",
-    "Apple": "3b05205efc8c92cebbd05e61078c9e84fa7ff5ba0c0160f485ce0559c31f919b",
+    "Microsoft": "0282a823f8f887bee2fc9dd4afa0dbb8efc9b9fc4817048aad1941dfca6fdd62",
+    "Apple": "72693fa709dad66fdcb8ff1e24b51665b477fa67f1f6cb48fe1f08f9529ba176",
     "Tiktok": "5da713785d488fd53a761fcd24dec192d18f2b7f92eed79e05b35e0912c74ab6",
     "GitHub": "df4830f1c82e3e5bfef499d48a9540e948bdb83235f1c3fd311780691bfd7fc0",
     "cn": "703c706f925afa756a404136ce2cbea856763969d241280ce55345519dc9332f",
@@ -85,9 +85,9 @@
     "netflixip": "21b6ddeeac461f72bd0097e203d82916b38da6b53dce0cc768d7e4386a8baad0",
     "private": "49972ad557345dd1abe94a62892f06cbc5b4cef12bf8d7ac5beca454b5de9088",
     "privateip": "a5e833af11e66049c1b1e06dbb47aa3e02df2cea7fcdebf46b59fefb6087525a",
-    "proxy": "3d243d593fecf3f7949569bce0a5417c546b8fc2cd0100f92f2ba41d85f6a771",
+    "proxy": "04063818091129ce57c9fa53ab00e71d1aa5cd4f0c96674c05af23fa85e4381c",
     "applecn": "2a6e5b0f49bd6852ae302959b96133f51833cde4bf61cc2ad12053a09087c859",
-    "mscn": "1c692c6ec5186fe182a8d54e6ee82a3ca77fdeec913ce7a98afc66599267815c",
+    "mscn": "14cdce409c7db54ea78056070665fc52c280fb2e6310e4f789ed1cebf358090d",
     "steamcn": "e6b5348e481a87eba0a3a9e4131f3247d92a365cb980d45863399b216c3fde58"
   },
   "categories": {
@@ -276,11 +276,11 @@
       "earlier_shadowed": 34
     },
     "Overseas": {
-      "source_count": 27288,
-      "independent_count": 22748,
-      "effective_count": 22748,
+      "source_count": 27293,
+      "independent_count": 22752,
+      "effective_count": 22752,
       "within_removed": 680,
-      "generic_excluded": 3860,
+      "generic_excluded": 3861,
       "earlier_shadowed": 0
     },
     "China": {
